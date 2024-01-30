@@ -1,5 +1,5 @@
 import React from 'react';
-import { ActivityIndicator, Text, View } from 'react-native';
+import { ActivityIndicator, Text, ToastAndroid, View } from 'react-native';
 import Base from '../components/Base/Base';
 import { Dispatch } from '../store';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,17 +11,22 @@ const HomePage = () => {
     const contacts = useSelector(({ contacts }: RootModelExt) => contacts.contacts);
     const isLoading = useSelector(({ contacts }: RootModelExt) => contacts.contactsAreLoading);
     const loadContacts = async () => {
-        dispatch.contacts.getAllContacts();
+        await dispatch.contacts.getAllContacts();
     };
     React.useEffect(() => {
-        if(contacts.length <= 0) {
+        if(!contacts) {
             loadContacts();
+            ToastAndroid.showWithGravity(
+                'Retrieving your contacts',
+                ToastAndroid.SHORT,
+                ToastAndroid.BOTTOM,
+              );
         }
-    }, [])
-    return isLoading ?  <ActivityIndicator size="large" color="#00ff00" /> : (
+    }, [contacts])
+    return isLoading && contacts ?  <ActivityIndicator size="large" color="#00ff00" /> : (
         <Base>
             <View>
-                {contacts.map((contact: Contact) => <Text key={contact.recordID}>{contact.displayName}</Text>)}
+                {contacts && contacts.map((contact: Contact) => <Text key={contact.recordID}>{contact.displayName}</Text>)}
             </View>
         </Base>
     );

@@ -4,6 +4,7 @@ import Contacts, { Contact } from 'react-native-contacts';
 import { ContactState } from "../types";
 import { RootModel } from ".";
 import { PERMISSIONS, check } from "react-native-permissions";
+import { ToastAndroid } from "react-native";
 
 export const MyContacts = createModel<RootModel>()({
   state: {
@@ -31,7 +32,11 @@ export const MyContacts = createModel<RootModel>()({
             dispatch.contacts.setContactState(false);
         } catch (error) {
             dispatch.contacts.setContactState(false);
-            console.error(error);
+            ToastAndroid.showWithGravity(
+                (error as Error).message,
+                ToastAndroid.SHORT,
+                ToastAndroid.BOTTOM,
+              );
         }
     },
   }),
