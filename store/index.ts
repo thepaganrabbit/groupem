@@ -1,5 +1,5 @@
-import { init, RematchDispatch, RematchRootState } from '@rematch/core';
-import { RootModel, models } from './models';
+import {init, RematchDispatch, RematchRootState} from '@rematch/core';
+import {RootModel, models} from './models';
 const store = init({
   models,
 });
