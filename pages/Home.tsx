@@ -2,6 +2,7 @@ import React from 'react';
 import {
   ActivityIndicator,
   Button,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -9,17 +10,17 @@ import {
   View,
 } from 'react-native';
 import Base from '../components/Base/Base';
-import {Dispatch} from '../store';
-import {useDispatch, useSelector} from 'react-redux';
-import {RootModelExt} from '../store/types';
+import { Dispatch } from '../store';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootModelExt } from '../store/types';
 import CreateGroupModal from '../components/CreateGroupModal/CreateGroupModal';
-import {ExtGroupObject} from '../types';
+import { ExtGroupObject } from '../types';
 
-const HomePage = () => {
+const HomePage = ({ navigation }: any) => {
   const dispatch: Dispatch = useDispatch();
-  const groups = useSelector(({groups}: RootModelExt) => groups.groups);
+  const groups = useSelector(({ groups }: RootModelExt) => groups.groups);
   const isLoading = useSelector(
-    ({groups}: RootModelExt) => groups.groupsAreLoading,
+    ({ groups }: RootModelExt) => groups.groupsAreLoading,
   );
   const loadGroups = async () => {
     await dispatch.groups.getAllgroups();
@@ -55,9 +56,15 @@ const HomePage = () => {
         <View style={styles.centeredBox}>
           {groups &&
             groups.map((group: ExtGroupObject) => (
-              <Text key={group.id} style={styles.chip}>
-                {group.group_title}
-              </Text>
+              <Pressable key={group.id} onTouchEnd={() => {
+                navigation.navigate('group', {
+                  groupID: group.id,
+                })
+              }}>
+                <Text  style={styles.chip}>
+                  {group.group_title}
+                </Text>
+              </Pressable>
             ))}
         </View>
       </ScrollView>
