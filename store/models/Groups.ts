@@ -67,5 +67,10 @@ export const MyGroups = createModel<RootModel>()({
         );
       }
     },
+    findGroup: (payload: number, state: any) => {
+      const foundGroup = state.groups.groups.filter((group: ExtGroupObject) => group.id === payload);
+      if(foundGroup.length <= 0) return null;
+      return foundGroup[0];
+    }
   }),
 });
