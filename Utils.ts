@@ -1,3 +1,5 @@
+import { Linking } from "react-native";
+
 export const WEBCOLOURS = [
     "#F0F8FF",
     "#FAEBD7",
@@ -145,3 +147,15 @@ export const WEBCOLOURS = [
   export const randomNumberGenerator = (min: number, max:number): number =>  {
     return Math.floor(Math.random() * (max - min) + min);
 }
+
+export const handlePhoneCall = (phoneNumber: string) => {
+  Linking.openURL(`tel:1${phoneNumber}`);
+};
+
+export const handleSMS = (phoneNumber: string) => {
+  Linking.openURL(`sms:1${phoneNumber}`);
+};
+
+export const handleEmail = (email: string) => {
+  Linking.openURL(`mailto:${email}`);
+};

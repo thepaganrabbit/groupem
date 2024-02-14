@@ -3,7 +3,7 @@ import { View, Text, ToastAndroid, ActivityIndicator, StyleSheet, ScrollView, Bu
 import { Dispatch } from '../store';
 import { useDispatch } from 'react-redux';
 import { Contact } from 'react-native-contacts';
-import { WEBCOLOURS, randomNumberGenerator } from '../Utils';
+import { WEBCOLOURS, handleEmail, handlePhoneCall, handleSMS, randomNumberGenerator } from '../Utils';
 import { Table, Row, Rows, TableWrapper } from 'react-native-table-component';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -31,10 +31,15 @@ const GrouPage = ({ route, navigation }: any): React.JSX.Element => {
        (found_group.contacts.forEach((fGroup: Contact) => {
             const rowArr: any[] = [
                 fGroup.displayName,
-                fGroup.phoneNumbers.length > 0 ? fGroup.phoneNumbers.filter((number) => number.label === 'mobile')[0].number : 'No Number Provided',
-                fGroup.emailAddresses.length > 0 ? fGroup.emailAddresses.filter((email) => email.label === 'home')[0].email : 'No Email Provided',
-                <Pressable><Icon name="phone" size={30} style={{textAlign: 'center'}}/></Pressable>,
-                <Pressable><MaterialCommunityIcon style={{textAlign: 'center'}} name="message" size={30} /></Pressable>,
+                <Pressable disabled={fGroup.emailAddresses.length <= 0} onPress={() => {
+                    handleEmail(fGroup.emailAddresses.filter((email) => email.label === 'home')[0].email);
+                }}><MaterialCommunityIcon style={{textAlign: 'center'}} name="email" size={30} color={fGroup.emailAddresses.length <= 0 ? WEBCOLOURS[4] : WEBCOLOURS[90]} /></Pressable>,
+                <Pressable disabled={fGroup.phoneNumbers.length <= 0} onPress={() => {
+                    handlePhoneCall(fGroup.phoneNumbers.filter((number) => number.label === 'mobile')[0].number);
+                }}><Icon name="phone" size={30} style={{textAlign: 'center'}} color={fGroup.phoneNumbers.length <= 0 ? WEBCOLOURS[4] : WEBCOLOURS[90]}/></Pressable>,
+                <Pressable disabled={fGroup.phoneNumbers.length <= 0} onPress={() => {
+                    handleSMS(fGroup.phoneNumbers.filter((number) => number.label === 'mobile')[0].number);
+                }}><MaterialCommunityIcon style={{textAlign: 'center'}} name="message" size={30} color={fGroup.phoneNumbers.length <= 0 ? WEBCOLOURS[4] : WEBCOLOURS[90]} /></Pressable>,
                 <Pressable><Icon name="trash" size={30} color={WEBCOLOURS[15]} style={{textAlign: 'center'}} /></Pressable>
             ];
            tableData.rows.push(rowArr);
